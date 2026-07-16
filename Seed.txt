@@ -26,13 +26,3 @@ C1 C2 C3 C4 C5
 Showtime
 1. 2026-07-10 13:45:30  Notting Hill(1)  SCREEN1  $15
 2. 2026-07-10 20:45:30  John Wick(2)  SCREEN2  $20  
-
-{
-  "email": "admin@RUGT.com",
-  "password": "JiWCxFcS3xR9T4plWgAvqVQHdUJhCw8yivYGvuXXXUA"
-}
-
-{
-  "email": "one@test.com",
-  "password": "oneoneoneone"
-}
