@@ -1,0 +1,38 @@
+Genre
+1. Action
+2. Comedy
+3. Drama
+4. Science Fiction
+5. Horror
+6. Fantasy
+7. Romance
+8. Thriller
+9. Mystery
+
+Movie
+1. Notting Hill   idk, romantic movie, i guess?   2h 4m    genre 2, 7 
+2. John Wick     very excied, cool pew pew pew movie   1h 41m    genre 1, 8
+
+Hall
+1. SCREEN1
+2. SCREEN2
+3. SCREEN3
+
+Seat
+A1 A2 A3 A4 A5
+B1 B2 B3 B4 B5
+C1 C2 C3 C4 C5
+
+Showtime
+1. 2026-07-10 13:45:30  Notting Hill(1)  SCREEN1  $15
+2. 2026-07-10 20:45:30  John Wick(2)  SCREEN2  $20  
+
+{
+  "email": "admin@RUGT.com",
+  "password": "JiWCxFcS3xR9T4plWgAvqVQHdUJhCw8yivYGvuXXXUA"
+}
+
+{
+  "email": "one@test.com",
+  "password": "oneoneoneone"
+}
