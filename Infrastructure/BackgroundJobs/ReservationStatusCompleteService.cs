@@ -15,6 +15,7 @@ public class ReservationStatusCompleteBackgroudJob : BackgroundService {
     protected override async Task ExecuteAsync(CancellationToken cancellationToken) {
         while (!cancellationToken.IsCancellationRequested) {
             using var scope = _scopeFactor.CreateScope();
+            
             var _context = scope.ServiceProvider
                 .GetRequiredService<MovieReservationSystemApiDbContext>();
 
