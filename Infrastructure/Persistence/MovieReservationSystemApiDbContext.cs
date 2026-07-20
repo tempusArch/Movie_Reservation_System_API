@@ -69,45 +69,45 @@ public class MovieReservationSystemApiDbContext : DbContext {
                 }
             );
 
-            modelBuilder.Entity<Showtime>()
-                .HasMany(st => st.ReservationRisuto)
-                .WithOne(r => r.Showtime)
-                .HasForeignKey(r => r.ShowtimeId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<Showtime>()
+            .HasMany(st => st.ReservationRisuto)
+            .WithOne(r => r.Showtime)
+            .HasForeignKey(r => r.ShowtimeId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Reservation>().Property(r => r.ReservationStatus).IsRequired();
+        modelBuilder.Entity<Reservation>().Property(r => r.ReservationStatus).IsRequired();
 
-            modelBuilder.Entity<Reservation>()
-                .ToTable(t => t.HasCheckConstraint("CK_ReservationTable_ReservationStatus", "ReservationStatus IN (0, 1, 2)"));
+        modelBuilder.Entity<Reservation>()
+            .ToTable(t => t.HasCheckConstraint("CK_ReservationTable_ReservationStatus", "ReservationStatus IN (0, 1, 2)"));
 
-            modelBuilder.Entity<Reservation>()
-                .HasMany(r => r.ReservedSeatRisuto)
-                .WithOne(rt => rt.Reservation)
-                .HasForeignKey(rt => rt.ReservationId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<Reservation>()
+            .HasMany(r => r.ReservedSeatRisuto)
+            .WithOne(rt => rt.Reservation)
+            .HasForeignKey(rt => rt.ReservationId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<ReservedSeat>()
-                .HasOne(rs => rs.Seat)
-                .WithMany()
-                .HasForeignKey(rs => rs.SeatId)
-                .OnDelete(DeleteBehavior.NoAction);
+        modelBuilder.Entity<ReservedSeat>()
+            .HasOne(rs => rs.Seat)
+            .WithMany()
+            .HasForeignKey(rs => rs.SeatId)
+            .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.ReservationRisuto)
-                .WithOne(r => r.User)
-                .HasForeignKey(r => r.UserId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.ReservationRisuto)
+            .WithOne(r => r.User)
+            .HasForeignKey(r => r.UserId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Hall>()
-                .HasMany(h => h.SeatRisuto)
-                .WithOne(s => s.Hall)
-                .HasForeignKey(s => s.HallId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<Hall>()
+            .HasMany(h => h.SeatRisuto)
+            .WithOne(s => s.Hall)
+            .HasForeignKey(s => s.HallId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<ReservedSeat>().HasKey(rs => new {rs.SeatId, rs.ShowtimeId});
+        modelBuilder.Entity<ReservedSeat>().HasKey(rs => new {rs.SeatId, rs.ShowtimeId});
     }
 }
