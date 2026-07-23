@@ -22,13 +22,18 @@ public class CreateShowtimeHandler : IRequestHandler<CreateShowtimeCommand, Show
             throw new InvalidOperationException("StartTime already has a Showtime");
 
         var theHall = await _context.HallTable
-            .FirstOrDefaultAsync(x => x.Id == command.CreateShowtimeDto.HallId, cancellationToken);
+            .AnyAsync(x => x.Id == command.CreateShowtimeDto.HallId, cancellationToken);
 
-        if (theHall == null)
+        if (!theHall)
             throw new NotFoundException("Hall not found");
 
         var theMovie = await _context.MovieTable
-            .FirstOrDefaultAsync(x => x.Id == command.CreateShowtimeDto.MovieId, cancellationToken);
+            .AsNoTracking()
+            .Where(x => x.Id == command.CreateShowtimeDto.MovieId)
+            .Select(x => new {
+                x.Duration
+            })
+            .FirstOrDefaultAsync(cancellationToken);
 
         if (theMovie == null)
             throw new NotFoundException("Movie not found");

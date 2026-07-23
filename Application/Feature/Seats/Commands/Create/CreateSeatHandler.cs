@@ -16,9 +16,9 @@ public class CreateSeatHandler : IRequestHandler<CreateSeatCommand, Seat> {
 
     public async Task<Seat> Handle(CreateSeatCommand command, CancellationToken cancellationToken) {
         var theHall = await _context.HallTable
-            .FirstOrDefaultAsync(x => x.Id == command.CreateSeatDto.HallId, cancellationToken);
+            .AnyAsync(x => x.Id == command.CreateSeatDto.HallId, cancellationToken);
 
-        if (theHall == null)
+        if (!theHall)
             throw new NotFoundException("Hall not found");
         
         var isExisted = await _context.SeatTable

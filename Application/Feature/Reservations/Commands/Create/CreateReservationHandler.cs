@@ -18,7 +18,12 @@ public class CreateReservationHandler : IRequestHandler<CreateReservationCommand
 
     public async Task<ReadReservationDtoUser> Handle(CreateReservationCommand command, CancellationToken cancellationToken) {
         var theShowtime = await _context.ShowtimeTable
-            .FirstOrDefaultAsync(st => st.Id == command.CreateReservationDto.ShowtimeId, cancellationToken);
+            .AsNoTracking()
+            .Where(st => st.Id == command.CreateReservationDto.ShowtimeId)
+            .Select(st => new {
+                st.StartTime
+            })
+            .FirstOrDefaultAsync(cancellationToken);
 
         if (theShowtime == null)
             throw new NotFoundException("Showtime not found");

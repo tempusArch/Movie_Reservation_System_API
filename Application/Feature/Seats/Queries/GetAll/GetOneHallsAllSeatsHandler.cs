@@ -15,7 +15,7 @@ public class GetOneHallsAllSeatsHandler : IRequestHandler<GetOneHallsAllSeatsQue
     }
 
     public async Task<SeatListResponseAdmin> Handle(GetOneHallsAllSeatsQuery query, CancellationToken cancellationToken) {     
-        var result = _context.SeatTable
+        var result = await _context.SeatTable
             .AsNoTracking()
             .Where(s => s.HallId == query.HallId)
             .Select(x => new ReadSeatDtoAdmin {
@@ -24,14 +24,12 @@ public class GetOneHallsAllSeatsHandler : IRequestHandler<GetOneHallsAllSeatsQue
                 LineNumber = x.LineNumber,
                 HallId = x.HallId,
                 HallName = x.Hall.Name
-            });
-        
-        var arranged = await result
+            })
             .OrderBy(s => s.Row)
             .ThenBy(s => s.LineNumber)
             .ToListAsync(cancellationToken);
 
-        return new SeatListResponseAdmin {Items = arranged};
+        return new SeatListResponseAdmin {Items = result};
     }
 }
 

@@ -26,7 +26,9 @@ public class GetManyShowtimesHandler : IRequestHandler<GetManyShowtimesQuery, Sh
         if (query.DateOnly != null)
             source = source.Where(s => DateOnly.FromDateTime(s.StartTime) >= query.DateOnly);
 
-        var result = source
+        var limit = Math.Min(query.Limit, 100);
+
+        var result = await source
             .Select(x => new ReadShowtimeDto {
                 ShowtimeId = x.Id,
 
@@ -41,18 +43,14 @@ public class GetManyShowtimesHandler : IRequestHandler<GetManyShowtimesQuery, Sh
 
                 MovieId = x.MovieId,
                 MovieName = x.Movie.Title,
-            });
-                 
-        var limit = Math.Min(query.Limit, 100);
-            
-        var arranged = await result
+            })
             .OrderBy(p => p.MovieName)
             .ThenBy(p => p.StartTime)
             .Skip((query.Page - 1) * limit)
             .Take(limit)
             .ToListAsync(cancellationToken);
 
-        return new ShowtimeListResponse {Items = arranged};
+        return new ShowtimeListResponse {Items = result};
     }
 }
 

@@ -23,7 +23,9 @@ public class GetManyGenresHandler : IRequestHandler<GetManyGenresQuery, GenreLis
         if (!string.IsNullOrWhiteSpace(query.MovieName))
             source = source.Where(g => g.MovieRisuto.Any(m => m.Title.Contains(query.MovieName)));
 
-        var result = source
+        var limit = Math.Min(query.Limit, 100);
+
+        var result = await source
             .Select(x => new ReadGenreDto {
                 GenreId = x.Id,
                 GenreName = x.Name,
@@ -35,17 +37,13 @@ public class GetManyGenresHandler : IRequestHandler<GetManyGenresQuery, GenreLis
                         Duration = z.Duration
                     })
                     .ToList()
-            });
-                 
-        var limit = Math.Min(query.Limit, 100);
-            
-        var arranged = await result
+            })
             .OrderBy(p => p.GenreName)
             .Skip((query.Page - 1) * limit)
             .Take(limit)
             .ToListAsync(cancellationToken);
 
-        return new GenreListResponse {Items = arranged};
+        return new GenreListResponse {Items = result};
     }
 }
 

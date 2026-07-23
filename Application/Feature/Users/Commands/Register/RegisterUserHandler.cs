@@ -6,19 +6,19 @@ using MovieReservationSystemAPI.Infrastructure;
 
 namespace MovieReservationSystemAPI.Application;
 
-public class CreateUserHandler : IRequestHandler<CreateUserCommand, UserResponse> {
+public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, UserResponse> {
     private readonly MovieReservationSystemApiDbContext _context;
     private readonly IMapper _mapper;
     private readonly IJwtService _jwtService;
     private readonly IPasswordHasher _passwordHasher;
-    public CreateUserHandler(MovieReservationSystemApiDbContext context, IMapper mapper, IJwtService jwtService, IPasswordHasher passordHasher) {
+    public RegisterUserHandler(MovieReservationSystemApiDbContext context, IMapper mapper, IJwtService jwtService, IPasswordHasher passordHasher) {
         _context = context;
         _mapper = mapper;
         _jwtService = jwtService;
         _passwordHasher = passordHasher;
     }
 
-    public async Task<UserResponse> Handle(CreateUserCommand command, CancellationToken cancellationToken) {
+    public async Task<UserResponse> Handle(RegisterUserCommand command, CancellationToken cancellationToken) {
         var isEmailExisted = await _context.UserTable
             .AnyAsync(x => x.Email == command.RegisterUserDto.Email);
 

@@ -22,20 +22,20 @@ public class HallController : ControllerBase {
 
     [Authorize(Roles = "Admin")]
     [HttpPost]
-    public async Task<ActionResult<ReadHallDto>> CreateHall([FromQuery] string HallName) {
+    public async Task<ActionResult<ReadHallDto>> CreateHall([FromQuery] string hallName) {
         _httpContextService.CheckUserIdClaim();
 
-        var result = await _mediator.Send(new CreateHallCommand(HallName));
+        var result = await _mediator.Send(new CreateHallCommand(hallName));
 
         return Created(string.Empty, result);
     }
 
     [Authorize(Roles = "Admin")]
     [HttpPut("{hallId}")]
-    public async Task<ActionResult<ReadHallDto>> UpdateHall(int hallId, [FromQuery] string HallName) {
+    public async Task<ActionResult<ReadHallDto>> UpdateHall(int hallId, [FromQuery] string hallName) {
         _httpContextService.CheckUserIdClaim();
         
-        return Ok(await _mediator.Send(new UpdateHallCommand(hallId, HallName)));
+        return Ok(await _mediator.Send(new UpdateHallCommand(hallId, hallName)));
     }
 
     [Authorize(Roles = "Admin")]

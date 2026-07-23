@@ -34,7 +34,12 @@ public class UpdateShowtimeHandler : IRequestHandler<UpdateShowtimeCommand, Show
             throw new NotFoundException("Hall not found");*/
 
         var theMovie = await _context.MovieTable
-            .FirstOrDefaultAsync(x => x.Id == command.UpdateShowtimeDto.MovieId, cancellationToken);
+            .AsNoTracking()
+            .Where(x => x.Id == command.UpdateShowtimeDto.MovieId)
+            .Select(x => new {
+                x.Duration
+            })
+            .FirstOrDefaultAsync(cancellationToken);
 
         if (theMovie == null)
             throw new NotFoundException("Movie not found");

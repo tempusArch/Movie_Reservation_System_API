@@ -58,7 +58,9 @@ public class GetManyReservationsAdminHandler : IRequestHandler<GetManyReservatio
             .ToListAsync(cancellationToken))
             .Sum(x => x.tempPrice * x.SeatCount);
 
-        var result = source
+        var limit = Math.Min(query.Limit, 100);
+
+        var result = await source
             .Select(r => new ReadReservationDtoAdmin {
                 ReservationId = r.Id,
                 
@@ -76,11 +78,7 @@ public class GetManyReservationsAdminHandler : IRequestHandler<GetManyReservatio
                     .Select(rs => $"{rs.Seat.Row}{rs.Seat.LineNumber}")
                     .ToList(),
                 CreatedAt = r.CreatedAt,
-            });
-
-        var limit = Math.Min(query.Limit, 100);
-            
-        var arranged = await result
+            })
             .OrderBy(p => p.MovieName)
             .ThenBy(p => p.CreatedAt)
             .Skip((query.Page - 1) * limit)
@@ -88,7 +86,7 @@ public class GetManyReservationsAdminHandler : IRequestHandler<GetManyReservatio
             .ToListAsync(cancellationToken);
 
         return new ReservationListResponseAdmin {
-            Items = arranged,
+            Items = result,
             TotalCount = totalCount,
             TotalPrice = totalPrice,           
         };

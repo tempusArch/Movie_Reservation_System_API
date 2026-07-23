@@ -18,7 +18,7 @@ public class CreateMovieHandler : IRequestHandler<CreateMovieCommand, Movie> {
         var isExisted = await _context.MovieTable.AnyAsync(m => m.Title == command.CreateMovieDto.Title, cancellationToken);
 
         if (isExisted)
-            throw new InvalidOperationException("Movie already existed");
+            throw new InvalidOperationException("Movie name already existed");
             
         var genreRisuto = await _context.GenreTable
             .Where(g => command.CreateMovieDto.GenreIdRisuto.Contains(g.Id))

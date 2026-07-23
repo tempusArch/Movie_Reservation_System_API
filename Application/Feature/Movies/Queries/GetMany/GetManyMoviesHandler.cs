@@ -27,7 +27,9 @@ public class GetManyMoviesHandler : IRequestHandler<GetManyMoviesQuery, MovieLis
         if (!string.IsNullOrWhiteSpace(query.GenreName))
             source = source.Where(m => m.GenreRisuto.Any(g => g.Name.Contains(query.GenreName)));
 
-        var result = source
+        var limit = Math.Min(query.Limit, 100);
+
+        var result = await source
             .Select(x => new ReadMovieDto {
                 MovieId = x.Id,
                 Title = x.Title,
@@ -52,18 +54,14 @@ public class GetManyMoviesHandler : IRequestHandler<GetManyMoviesQuery, MovieLis
                         HallName = s.Hall.Name
                     })
                     .ToList()
-            });
-
-        var limit = Math.Min(query.Limit, 100);
-            
-        var arranged = await result
+            })
             .OrderBy(p => p.Title)
             .ThenBy(p => p.Duration)
             .Skip((query.Page - 1) * limit)
             .Take(limit)
             .ToListAsync(cancellationToken);
 
-        return new MovieListResponse {Items = arranged};
+        return new MovieListResponse {Items = result};
     }
 }
 

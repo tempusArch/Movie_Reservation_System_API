@@ -15,7 +15,9 @@ public class GetAllHallsHandler : IRequestHandler<GetAllHallsQuery, HallListResp
     }
 
     public async Task<HallListResponse> Handle(GetAllHallsQuery query, CancellationToken cancellationToken) {
-        var result = _context.HallTable
+        var limit = Math.Min(query.Limit, 100);
+        
+        var result = await _context.HallTable
             .AsNoTracking()
             .Select(x => new ReadHallDto {
                 HallId = x.Id,
@@ -28,17 +30,13 @@ public class GetAllHallsHandler : IRequestHandler<GetAllHallsQuery, HallListResp
                         LineNumber = z.LineNumber
                     })
                     .ToList()
-            });
-
-        var limit = Math.Min(query.Limit, 100);
-
-        var arranged = await result
+            })
             .OrderBy(h => h.HallName)
             .Skip((query.Page - 1) * limit)
             .Take(limit)
             .ToListAsync(cancellationToken);
 
-        return new HallListResponse {Items = arranged};
+        return new HallListResponse {Items = result};
     }
 }
 
